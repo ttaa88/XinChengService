@@ -24,6 +24,13 @@ namespace XinChengService
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddMvc();
+            services.AddAuthentication(options =>
+            {
+                // the scheme name has to match the value we're going to use in AuthenticationBuilder.AddScheme(...)
+                options.DefaultAuthenticateScheme = "Custom Scheme";
+                options.DefaultChallengeScheme = "Custom Scheme";
+            })
+            .AddCustomAuth(o => { });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -34,6 +41,7 @@ namespace XinChengService
                 app.UseDeveloperExceptionPage();
             }
 
+            app.UseAuthentication();
             app.UseMvc();
         }
     }

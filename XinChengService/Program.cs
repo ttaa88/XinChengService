@@ -17,10 +17,19 @@ namespace XinChengService
             BuildWebHost(args).Run();
         }
 
-        public static IWebHost BuildWebHost(string[] args) =>
-            WebHost.CreateDefaultBuilder(args)
-                .UseUrls("http://*:5000;http://localhost:5001;https://hostname:5002")
+        public static IWebHost BuildWebHost(string[] args)
+        {
+            var config = new ConfigurationBuilder()
+                .SetBasePath(Directory.GetCurrentDirectory())
+                .AddJsonFile(Path.Combine("Config", "hosting.json"), true)
+                .AddCommandLine(args)
+                .Build();
+
+            return WebHost.CreateDefaultBuilder(args)
+                //.UseUrls("http://*:5000;http://localhost:5001")
+                .UseConfiguration(config)
                 .UseStartup<Startup>()
                 .Build();
+        }            
     }
 }
